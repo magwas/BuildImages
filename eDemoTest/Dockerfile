@@ -38,7 +38,13 @@ RUN tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"
 # Setting the PATH so our customer Firefox version will be used first
 ENV PATH $FIREFOX_DIR:$PATH
 
-# Set up the Chrome PPA
+RUN apt-get -y install libgnome-keyring0 libxss1 xdg-utils
+ENV VERSION=41.0.2272.76-0ubuntu1.1134
+RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_${VERSION}_amd64.deb
+RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-chromedriver_${VERSION}_amd64.deb
+RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_${VERSION}_all.deb
+RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_${VERSION}_amd64.deb
+RUN dpkg -i *.deb
 #RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 #RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 #
@@ -58,7 +64,7 @@ ENV PATH $FIREFOX_DIR:$PATH
 ## Put Chromedriver into the PATH
 #ENV PATH $CHROMEDRIVER_DIR:$PATH
 
-RUN apt-get -y install chromium-chromedriver
+#RUN apt-get -y install chromium-chromedriver
 
 #for debugging
 RUN apt-get -y install tightvncserver
