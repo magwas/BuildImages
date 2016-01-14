@@ -8,5 +8,6 @@ cd PDOauth/
 ./tools/setupdoc
 export DISPLAY=:99.0
 Xvfb :99&
+service postgresql start
 make checkall
 

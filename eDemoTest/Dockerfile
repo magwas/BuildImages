@@ -12,19 +12,18 @@ RUN apt-get -y install python make python-pip openjdk-7-jre\
     libnss3-tools unzip\
     git python-dev libssl-dev python-m2crypto xvfb
 
+RUN apt-get install -y postgresql python-psycopg2
+RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root
+
 RUN apt-get -y install python-pykcs11 libsofthsm
 
-ADD certs.json /etc/chromium-browser/policies/managed/
 
 ADD pdoauthtest /usr/local/bin/pdoauthtest
 ADD requirements.txt /tmp/requirements.txt
+
+RUN apt-get install -y wget
 RUN pip install -r /tmp/requirements.txt
 
-
-#firefox and chrome install code is from https://codeship.com/documentation/docker/browser-testing/
-RUN apt-get -y install firefox
-
-RUN apt-get -y install wget
 # Setting the Firefox version and installation directory through environment variables.
 ENV FIREFOX_VERSION 40.0
 ENV FIREFOX_DIR /firefox
@@ -39,32 +38,30 @@ RUN tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"
 ENV PATH $FIREFOX_DIR:$PATH
 
 RUN apt-get -y install libgnome-keyring0 libxss1 xdg-utils
-ENV VERSION=41.0.2272.76-0ubuntu1.1134
+ENV VERSION=47.0.2526.106-0ubuntu0.14.04.1.1107
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_${VERSION}_amd64.deb
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-chromedriver_${VERSION}_amd64.deb
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_${VERSION}_all.deb
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_${VERSION}_amd64.deb
 RUN dpkg -i *.deb
-#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-#RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-#
-#RUN apt-get update
-#
-#RUN apt-get -y install google-chrome-stable
-#
-## Set up Chromedriver Environment variables
-#ENV CHROMEDRIVER_VERSION 2.19
-#ENV CHROMEDRIVER_DIR /chromedriver
-#RUN mkdir $CHROMEDRIVER_DIR
-#
-## Download and install Chromedriver
-#RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-#RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
-#
-## Put Chromedriver into the PATH
-#ENV PATH $CHROMEDRIVER_DIR:$PATH
 
-#RUN apt-get -y install chromium-chromedriver
+ADD certs.json /etc/chromium-browser/policies/managed/
+
+#RUN apt-get -y install chromium-browser
+
+#RUN apt-get -y install firefox
+
+# Set up Chromedriver Environment variables
+ENV CHROMEDRIVER_VERSION 2.20
+ENV CHROMEDRIVER_DIR /chromedriver
+RUN mkdir $CHROMEDRIVER_DIR
+
+# Download and install Chromedriver
+RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
+
+# Put Chromedriver into the PATH
+ENV PATH $CHROMEDRIVER_DIR:$PATH
 
 #for debugging
 RUN apt-get -y install tightvncserver
