@@ -20,6 +20,10 @@ RUN mkdir /home/develop/build;cd /home/develop/build; git clone https://github.c
 
 RUN mkdir /opt;cd /opt ; wget -q http://downloads.sourceforge.net/project/zenta/Zenta-linux-x86_64.zip ; unzip Zenta-linux-x86_64.zip ; rm -f Zenta-linux-x86_64.zip
 
+RUN ln -s /home/develop/lib /root/lib
+
+RUN ln -s /home/develop/build /root/build
+
 CMD sudo su - develop
 
 
