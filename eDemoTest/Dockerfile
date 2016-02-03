@@ -38,7 +38,7 @@ RUN tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"
 ENV PATH $FIREFOX_DIR:$PATH
 
 RUN apt-get -y install libgnome-keyring0 libxss1 xdg-utils
-ENV VERSION=47.0.2526.106-0ubuntu0.14.04.1.1107
+ENV VERSION=48.0.2564.82-0ubuntu0.14.04.1.1108
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_${VERSION}_amd64.deb
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-chromedriver_${VERSION}_amd64.deb
 RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_${VERSION}_all.deb
@@ -47,12 +47,8 @@ RUN dpkg -i *.deb
 
 ADD certs.json /etc/chromium-browser/policies/managed/
 
-#RUN apt-get -y install chromium-browser
-
-#RUN apt-get -y install firefox
-
 # Set up Chromedriver Environment variables
-ENV CHROMEDRIVER_VERSION 2.20
+ENV CHROMEDRIVER_VERSION 2.21
 ENV CHROMEDRIVER_DIR /chromedriver
 RUN mkdir $CHROMEDRIVER_DIR
 
