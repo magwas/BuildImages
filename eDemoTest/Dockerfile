@@ -37,29 +37,38 @@ RUN tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"
 # Setting the PATH so our customer Firefox version will be used first
 ENV PATH $FIREFOX_DIR:$PATH
 
-RUN apt-get -y install libgnome-keyring0 libxss1 xdg-utils
-ENV VERSION=48.0.2564.82-0ubuntu0.14.04.1.1108
-RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser_${VERSION}_amd64.deb
-RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-chromedriver_${VERSION}_amd64.deb
-RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-browser-l10n_${VERSION}_all.deb
-RUN wget -q http://archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_${VERSION}_amd64.deb
-RUN dpkg -i *.deb
+RUN apt-get -y install software-properties-common
+
+ENV CHROME_DRIVER_VERSION 2.21
+
+#===============
+# Google Chrome
+#===============
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+  && apt-get update -qqy \
+  && apt-get -qqy install google-chrome-stable \
+  && rm /etc/apt/sources.list.d/google-chrome.list \
+  && rm -rf /var/lib/apt/lists/*
+
+#==================
+# Chrome webdriver
+#==================
+
+RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
+  && rm -rf /opt/selenium/chromedriver \
+  && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
+  && rm /tmp/chromedriver_linux64.zip \
+  && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
+  && chmod 755 /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
+  && ln -fs /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
+
 
 ADD certs.json /etc/chromium-browser/policies/managed/
-
-# Set up Chromedriver Environment variables
-ENV CHROMEDRIVER_VERSION 2.21
-ENV CHROMEDRIVER_DIR /chromedriver
-RUN mkdir $CHROMEDRIVER_DIR
-
-# Download and install Chromedriver
-RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
-
-# Put Chromedriver into the PATH
-ENV PATH $CHROMEDRIVER_DIR:$PATH
+ADD certs.json /etc/opt/chrome/policies/managed/
 
 #for debugging
-RUN apt-get -y install tightvncserver
+RUN apt-get update
+RUN apt-get -y install vnc4server
 CMD /bin/bash
 
