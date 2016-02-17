@@ -69,6 +69,6 @@ ADD certs.json /etc/opt/chrome/policies/managed/
 
 #for debugging
 RUN apt-get update
-RUN apt-get -y install vnc4server
+RUN apt-get -y install vnc4server opensc
 CMD /bin/bash
 
