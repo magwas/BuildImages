@@ -70,5 +70,6 @@ ADD certs.json /etc/opt/chrome/policies/managed/
 #for debugging
 RUN apt-get update
 RUN apt-get -y install vnc4server opensc
+RUN sed -i 's/peer/trust/' /etc/postgresql/9.3/main/pg_hba.conf
 CMD /bin/bash
 
