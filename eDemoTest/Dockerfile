@@ -15,7 +15,7 @@ RUN apt-get -y install python make python-pip openjdk-7-jre\
 RUN apt-get install -y postgresql python-psycopg2
 RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root
 
-RUN apt-get -y install python-pykcs11 libsofthsm
+RUN apt-get -y install python-pykcs11 libsofthsm python-coverage
 
 
 ADD pdoauthtest /usr/local/bin/pdoauthtest
