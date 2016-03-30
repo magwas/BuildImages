@@ -71,5 +71,16 @@ ADD certs.json /etc/opt/chrome/policies/managed/
 RUN apt-get update
 RUN apt-get -y install vnc4server opensc
 RUN sed -i 's/peer/trust/' /etc/postgresql/9.3/main/pg_hba.conf
+RUN cd /usr/local/lib ; wget -q http://downloads.sourceforge.net/project/saxon/Saxon-HE/9.4/SaxonHE9-4-0-2J.zip;unzip SaxonHE9-4-0-2J.zip ; rm -f SaxonHE9-4-0-2J.zip
+RUN mkdir -p /dependencies/javascript
+RUN curl http://code.jquery.com/qunit/qunit-1.18.0.js -o /dependencies/javascript/qunit-1.18.0.js
+RUN curl http://code.jquery.com/qunit/qunit-1.18.0.css -o /dependencies/javascript/qunit-1.18.0.css
+RUN curl https://raw.githubusercontent.com/JamesMGreene/qunit-reporter-junit/master/qunit-reporter-junit.js -o /dependencies/javascript/qunit-reporter-junit.js
+RUN curl https://raw.githubusercontent.com/alex-seville/blanket/89266afe70ea733592f5d51f213657d98e19fc0a/dist/qunit/blanket.js -o /dependencies/javascript/blanket.min.js
+RUN curl https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css -o /dependencies/javascript/bootstrap.min.css
+RUN curl https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js -o /dependencies/javascript/bootstrap.min.js
+RUN curl https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js -o /dependencies/javascript/jquery.min.js
+
 CMD /bin/bash
+
 
