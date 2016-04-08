@@ -18,7 +18,7 @@ RUN mkdir /home/develop/lib; cd /home/develop/lib ; wget -q http://downloads.sou
 
 RUN mkdir /home/develop/build;cd /home/develop/build; git clone https://github.com/expath/xspec.git
 
-RUN mkdir /opt;cd /opt ; wget -q http://downloads.sourceforge.net/project/zenta/Zenta-linux.gtk.x86_64.zip ; unzip Zenta-linux-x86_64.zip ; rm -f Zenta-linux-x86_64.zip
+RUN mkdir /opt;cd /opt ; wget -q http://downloads.sourceforge.net/project/zenta/Zenta-linux.gtk.x86_64.zip ; unzip Zenta-linux.gtk.x86_64.zip ; rm -f Zenta-linux.gtk.x86_64.zip
 
 RUN ln -s /home/develop/lib /root/lib
 
