@@ -7,8 +7,12 @@ RUN apt-get update
 
 RUN apt-get -o Dpkg::Options::="--force-confold" --force-yes -fuy upgrade
 
+RUN apt-get -y install software-properties-common
+RUN apt-add-repository -y ppa:openjdk-r/ppa
+
 RUN apt-get update
-RUN apt-get -y install openjdk-7-jre wget git xvfb unzip docbook-xsl make firefox libwebkitgtk-1.0-0 tightvncserver dblatex
+RUN apt-get -y install openjdk-8-jre wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni
+
 
 RUN useradd develop
 RUN mkdir /home/develop
