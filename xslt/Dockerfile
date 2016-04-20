@@ -24,6 +24,8 @@ RUN mkdir /home/develop/build;cd /home/develop/build; git clone https://github.c
 
 RUN mkdir /opt;cd /opt ; wget -q http://downloads.sourceforge.net/project/zenta/Zenta-linux.gtk.x86_64.zip ; unzip Zenta-linux.gtk.x86_64.zip ; rm -f Zenta-linux.gtk.x86_64.zip
 
+RUN wget "http://search.maven.org/remotecontent?filepath=net/sourceforge/saxon/saxon/9.1.0.8/saxon-9.1.0.8.jar" -O /usr/local/lib/saxon9.jar
+
 RUN ln -s /home/develop/lib /root/lib
 
 RUN ln -s /home/develop/build /root/build
