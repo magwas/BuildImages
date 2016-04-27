@@ -11,7 +11,7 @@ RUN apt-get -y install software-properties-common
 RUN apt-add-repository -y ppa:openjdk-r/ppa
 
 RUN apt-get update
-RUN apt-get -y install openjdk-8-jre wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml
+RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml
 
 
 RUN useradd develop
