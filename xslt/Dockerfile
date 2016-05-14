@@ -11,7 +11,7 @@ RUN apt-get -y install software-properties-common
 RUN apt-add-repository -y ppa:openjdk-r/ppa
 
 RUN apt-get update
-RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip
+RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil
 
 
 RUN useradd develop
@@ -26,7 +26,7 @@ RUN mkdir /opt;cd /opt ; wget -q http://downloads.sourceforge.net/project/zenta/
 
 RUN wget "http://search.maven.org/remotecontent?filepath=net/sourceforge/saxon/saxon/9.1.0.8/saxon-9.1.0.8.jar" -O /usr/local/lib/saxon9.jar
 
-RUN pip install jira
+RUN pip install jira 
 
 RUN ln -s /home/develop/lib /root/lib
 
