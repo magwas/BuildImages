@@ -11,7 +11,7 @@ RUN apt-get -y install software-properties-common
 RUN apt-add-repository -y ppa:openjdk-r/ppa
 
 RUN apt-get update
-RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil zip
+RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil zip debhelper devscripts
 
 
 RUN useradd develop
@@ -31,6 +31,9 @@ RUN pip install jira
 RUN ln -s /home/develop/lib /root/lib
 
 RUN ln -s /home/develop/build /root/build
+
+RUN git config --global user.email "mag+xsltbuilder@magwas.rulez.org"
+RUN git config --global user.name "magwas/edemotest:xslt docker image"
 
 CMD sudo su - develop
 
