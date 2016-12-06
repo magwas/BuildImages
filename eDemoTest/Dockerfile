@@ -1,76 +1,36 @@
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 
 RUN locale-gen en_US en_US.UTF-8 && \
-    dpkg-reconfigure locales
+    dpkg-reconfigure -f noninteractive locales
 
 RUN apt-get update
 
-RUN apt-get -o Dpkg::Options::="--force-confold" --force-yes -fuy upgrade
+RUN apt-get -uy upgrade
 
-RUN apt-get -y install python make python-pip openjdk-7-jre\
-    curl docbook-xsl apache2 libapache2-mod-wsgi swig libffi-dev\
+RUN apt-get -y install python3 make python3-pip openjdk-9-jre\
+    curl docbook-xsl apache2 swig libffi-dev\
     libnss3-tools unzip\
-    git python-dev libssl-dev python-m2crypto xvfb
+    git python3-dev libssl-dev xvfb postgresql python3-psycopg2\
+    python3-pykcs11 libsofthsm python3-coverage wget firefox \
+    software-properties-common vnc4server opensc sudo \
+    python3-lxml chromium-chromedriver apache2-dev \
+    fvwm vim python libapache2-mod-wsgi python-crypto\
+    syslog-ng-core python-pydoctor python-sourcecodegen
 
-RUN apt-get install -y postgresql python-psycopg2
-RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root
+RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root; service postgresql stop
 
-RUN apt-get -y install python-pykcs11 libsofthsm python-coverage
-
-
-ADD pdoauthtest /usr/local/bin/pdoauthtest
 ADD requirements.txt /tmp/requirements.txt
 
-RUN apt-get install -y wget
-RUN pip install -r /tmp/requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
 
-# Setting the Firefox version and installation directory through environment variables.
-ENV FIREFOX_VERSION 40.0
-ENV FIREFOX_DIR /firefox
-ENV FIREFOX_FILENAME $FIREFOX_DIR/firefox.tar.bz2
+RUN ln -s /usr/local/lib/python3.5/dist-packages/mod_wsgi/server/mod_wsgi-*.so /usr/lib/apache2/modules/mod_wsgi_py3.so
 
-# Create the Firefox directory, download the custom Firefox version from Mozilla and untar it.
-RUN mkdir $FIREFOX_DIR
-RUN wget -q --continue --output-document $FIREFOX_FILENAME "https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2"
-RUN tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"
-
-# Setting the PATH so our customer Firefox version will be used first
-ENV PATH $FIREFOX_DIR:$PATH
-
-RUN apt-get -y install software-properties-common
-
-ENV CHROME_DRIVER_VERSION 2.21
-
-#===============
-# Google Chrome
-#===============
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-  && apt-get update -qqy \
-  && apt-get -qqy install google-chrome-stable \
-  && rm /etc/apt/sources.list.d/google-chrome.list \
-  && rm -rf /var/lib/apt/lists/*
-
-#==================
-# Chrome webdriver
-#==================
-
-RUN wget --no-verbose -O /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
-  && rm -rf /opt/selenium/chromedriver \
-  && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
-  && rm /tmp/chromedriver_linux64.zip \
-  && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
-  && chmod 755 /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
-  && ln -fs /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
-
-
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz -O /tmp/geckodriver.tar.gz;cd /usr/local/bin;tar xvzf /tmp/geckodriver.tar.gz
 ADD certs.json /etc/chromium-browser/policies/managed/
 ADD certs.json /etc/opt/chrome/policies/managed/
 
-#for debugging
-RUN apt-get update
-RUN apt-get -y install vnc4server opensc
-RUN sed -i 's/peer/trust/' /etc/postgresql/9.3/main/pg_hba.conf
+RUN sed -i 's/peer/trust/' /etc/postgresql/*/main/pg_hba.conf
+
 RUN cd /usr/local/lib ; wget -q http://downloads.sourceforge.net/project/saxon/Saxon-HE/9.4/SaxonHE9-4-0-2J.zip;unzip SaxonHE9-4-0-2J.zip ; rm -f SaxonHE9-4-0-2J.zip
 RUN mkdir -p /dependencies/javascript
 RUN curl http://code.jquery.com/qunit/qunit-1.18.0.js -o /dependencies/javascript/qunit-1.18.0.js
