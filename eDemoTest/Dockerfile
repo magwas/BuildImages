@@ -19,9 +19,9 @@ RUN apt-get -y install python3 make python3-pip openjdk-9-jre\
 
 RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root; service postgresql stop
 
-ADD requirements.txt /tmp/requirements.txt
-
-RUN pip3 install -r /tmp/requirements.txt
+RUN pip3 install Flask Flask-Login Flask-Mail Flask-Migrate Flask-SQLAlchemy Flask-Script \
+    Flask-WTF SQLAlchemy beautifulsoup4 pyoauth2-shift selenium pyOpenSSL uritools \
+    mod_wsgi enforce polib
 
 RUN pip install vnc2flv
 
