@@ -15,13 +15,15 @@ RUN apt-get -y install python3 make python3-pip openjdk-9-jre\
     software-properties-common vnc4server opensc sudo \
     python3-lxml chromium-chromedriver apache2-dev \
     fvwm vim python libapache2-mod-wsgi python-crypto\
-    syslog-ng-core python-pydoctor python-sourcecodegen
+    syslog-ng-core python-pydoctor python-sourcecodegen python-pip
 
 RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root; service postgresql stop
 
 ADD requirements.txt /tmp/requirements.txt
 
 RUN pip3 install -r /tmp/requirements.txt
+
+RUN pip install vnc2flv
 
 RUN ln -s /usr/local/lib/python3.5/dist-packages/mod_wsgi/server/mod_wsgi-*.so /usr/lib/apache2/modules/mod_wsgi_py3.so
 
