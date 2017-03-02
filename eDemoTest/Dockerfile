@@ -16,7 +16,7 @@ RUN apt-get -y install python3 make python3-pip openjdk-9-jre\
     python3-lxml chromium-chromedriver apache2-dev \
     fvwm vim python libapache2-mod-wsgi python-crypto\
     syslog-ng-core python-pydoctor python-sourcecodegen\
-    nodejs-legacy npm phantomjs
+    nodejs-legacy npm 
 
 RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root; service postgresql stop
 
@@ -24,7 +24,7 @@ RUN pip3 install Flask Flask-Login Flask-Mail Flask-Migrate Flask-SQLAlchemy Fla
     Flask-WTF SQLAlchemy beautifulsoup4 pyoauth2-shift selenium pyOpenSSL uritools \
     mod_wsgi enforce polib
 
-RUN npm install -g rollup qunitjs qunit-phantomjs-runner
+RUN npm install -g rollup qunit-cli
 RUN pip install vnc2flv j2cli
 
 RUN ln -s /usr/local/lib/python3.5/dist-packages/mod_wsgi/server/mod_wsgi-*.so /usr/lib/apache2/modules/mod_wsgi_py3.so
