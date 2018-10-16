@@ -1,8 +1,5 @@
 FROM ubuntu:xenial
 
-RUN locale-gen en_US en_US.UTF-8 && \
-    dpkg-reconfigure -f noninteractive locales
-
 RUN apt-get update
 
 RUN apt-get -uy upgrade
@@ -16,7 +13,7 @@ RUN apt-get -y install python3 make python3-pip openjdk-9-jre\
     python3-lxml chromium-chromedriver apache2-dev \
     fvwm vim python libapache2-mod-wsgi python-crypto\
     syslog-ng-core python-pydoctor python-sourcecodegen\
-    nodejs-legacy npm 
+    nodejs-legacy npm apt-transport-https python-pip
 
 RUN service postgresql start ; sudo -u postgres createuser root ; sudo -u postgres createdb root -O root; service postgresql stop
 
