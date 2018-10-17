@@ -1,19 +1,16 @@
-FROM ubuntu:trusty
-
-RUN locale-gen en_US en_US.UTF-8 && \
-    dpkg-reconfigure locales
+FROM ubuntu:xenial
 
 RUN apt-get update
 
-RUN apt-get -o Dpkg::Options::="--force-confold" --force-yes -fuy upgrade
+RUN apt-get -y upgrade
 
-RUN apt-get -y install software-properties-common
+RUN apt-get -y install software-properties-common apt-transport-https
 RUN apt-add-repository -y ppa:openjdk-r/ppa
 RUN apt-key adv --keyserver keys.gnupg.net --recv B761AA278C7AB952
 RUN echo deb http://repos.demokracia.rulez.org/apt/debian/ unstable main >/etc/apt/sources.list.d/repos.demokracia.rulez.org.list
 
 RUN apt-get update
-RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil zip debhelper devscripts zenta-tools
+RUN apt-get -y install openjdk-8-jdk wget git xvfb unzip docbook-xsl make firefox tightvncserver dblatex libwebkitgtk-3.0-0 libswt-webkit-gtk-3-jni python-yaml python-pip python-dateutil zip debhelper devscripts zenta-tools python-pip
 
 
 RUN useradd develop
